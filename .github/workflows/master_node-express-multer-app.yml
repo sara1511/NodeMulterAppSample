@@ -23,20 +23,23 @@ jobs:
 
       - name: Extract Git Tag
         run: |
-          echo "GIT_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-          echo ${{ env.GIT_TAG }}
+          echo "GIT_TAG=$GITHUB_REF_NAME" >> $GITHUB_ENV
 
       - name: npm install, build, and test
         run: |
+          echo ${{ env.GIT_TAG }}
           npm install
           npm run build --if-present
           npm run test --if-present
+
+      - name: Zip artifact to upload
+        run: zip -r app-release.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: ./app-release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -58,4 +61,4 @@ jobs:
           app-name: 'node-express-multer-app'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6B253B3DDBFC45DEA0C4EC5D70226EA9 }}
-          package: .
+          package: ./app-release.zip

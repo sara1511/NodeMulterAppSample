@@ -21,13 +21,20 @@ jobs:
         with:
           node-version: '14.x'
 
-      - name: Extract Git Tag
-        run: |
-          echo "GIT_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      - name: Output Run ID
+        run: echo ${{ github.run_id }}
+
+      - name: Output Run Number
+        run: echo ${{ github.run_number }}
+
+      - name: Output Run Attempt
+        run: echo ${{ github.run_attempt }}
+        
+      - name: Output Run sha
+        run: echo ${{ github.sha }}
 
       - name: npm install, build, and test
         run: |
-          echo ${{ env.GIT_TAG }}
           npm install
           npm run build --if-present
           npm run test --if-present

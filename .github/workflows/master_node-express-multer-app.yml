@@ -23,7 +23,7 @@ jobs:
 
       - name: Extract Git Tag
         run: |
-          echo "GIT_TAG=$GITHUB_REF_NAME" >> $GITHUB_ENV
+          echo "GIT_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: npm install, build, and test
         run: |
